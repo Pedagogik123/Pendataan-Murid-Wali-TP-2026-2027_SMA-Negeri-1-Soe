@@ -1,0 +1,558 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#183b63">
+<title>Pendataan Murid Wali | SMAN 1 Soe</title>
+
+<style>
+:root {
+  --navy: #183b63;
+  --blue: #2864a8;
+  --bg: #f2f5fa;
+  --white: #ffffff;
+  --text: #26364a;
+  --muted: #718096;
+  --border: #dce4ef;
+  --green: #18794e;
+  --red: #b42318;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.55;
+}
+header {
+  padding: 32px 18px;
+  text-align: center;
+  color: white;
+  background: linear-gradient(135deg, #173455, #2864a8);
+}
+.school {
+  display: inline-block;
+  border: 1px solid #ffffff70;
+  border-radius: 30px;
+  padding: 5px 15px;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+}
+header h1 { margin: 14px 0 5px; font-size: clamp(23px, 4vw, 34px); }
+header p { margin: 5px 0; color: #e0eaf7; }
+main { max-width: 1000px; margin: 22px auto; padding: 0 14px 30px; }
+.tabs { display: flex; gap: 9px; margin-bottom: 16px; }
+button {
+  cursor: pointer;
+  border: 0;
+  border-radius: 9px;
+  padding: 11px 16px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.tab { flex: 1; color: var(--navy); background: #e0e8f4; }
+.tab.active, .primary { color: white; background: var(--blue); }
+.panel {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: clamp(17px, 4vw, 28px);
+  box-shadow: 0 5px 20px #1d355710;
+  margin-bottom: 16px;
+}
+h2 { color: var(--navy); margin-top: 0; font-size: 22px; }
+h3 { color: var(--navy); margin: 8px 0 14px; }
+.muted { color: var(--muted); font-size: 14px; }
+.section {
+  margin: 24px 0 13px;
+  padding: 10px 12px;
+  color: var(--navy);
+  background: #edf3fb;
+  border-left: 4px solid var(--blue);
+  border-radius: 5px;
+  font-weight: 700;
+}
+label { display: block; margin: 14px 0 6px; font-size: 14px; font-weight: 600; }
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccd7e5;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--text);
+  font: inherit;
+}
+input:focus, select:focus, textarea:focus {
+  outline: 2px solid #a7c7f1;
+  border-color: var(--blue);
+}
+input[readonly] { background: #edf1f6; }
+.primary { margin-top: 18px; }
+.full { width: 100%; }
+.secondary { color: var(--navy); background: #e6edf7; }
+.danger { background: #fff0ef; color: var(--red); }
+.hidden { display: none !important; }
+.notice {
+  padding: 12px;
+  border-radius: 8px;
+  background: #fff7e6;
+  color: #77510b;
+  font-size: 13px;
+}
+.success { color: var(--green); font-weight: 600; }
+.error { color: var(--red); font-weight: 600; }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.actions button { flex: 1; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { border-bottom: 1px solid var(--border); padding: 10px; text-align: left; }
+th { background: #edf3fb; color: var(--navy); white-space: nowrap; }
+footer { text-align: center; padding: 20px 12px; color: var(--muted); font-size: 13px; }
+@media (max-width: 600px) {
+  header { padding: 25px 14px; }
+  main { margin-top: 14px; padding: 0 10px 20px; }
+  .grid { grid-template-columns: 1fr; gap: 0; }
+  .tabs button { padding: 10px 6px; font-size: 12px; }
+  .panel { border-radius: 12px; }
+}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="school">SMA NEGERI 1 SOE</div>
+  <h1>Pendataan Murid Wali</h1>
+  <p>Tahun Ajaran 2026/2027</p>
+  <p>Guru Wali: <strong>Dison Linome, S.Pd, Gr.</strong></p>
+</header>
+
+<main>
+  <nav class="tabs">
+    <button class="tab active" id="tabSiswa" onclick="showPage('siswa')">Siswa</button>
+    <button class="tab" id="tabGuru" onclick="showPage('guru')">Guru Wali</button>
+  </nav>
+
+  <section id="pageSiswa">
+    <div class="panel" id="loginPanel">
+      <h2>Masuk Siswa</h2>
+      <p class="muted">Masukkan identitas untuk memulai pendataan.</p>
+      <form id="loginForm">
+        <label for="loginNama">Nama lengkap</label>
+        <input id="loginNama" required autocomplete="name" placeholder="Nama sesuai data sekolah">
+
+        <label for="loginKelas">Kelas</label>
+        <select id="loginKelas" required>
+          <option value="">Pilih kelas</option>
+          <option value="X">Kelas X</option>
+          <option value="XI">Kelas XI</option>
+          <option value="XII">Kelas XII</option>
+        </select>
+
+        <label for="loginNisn">NISN (10 digit)</label>
+        <input id="loginNisn" required inputmode="numeric"
+          pattern="[0-9]{10}" maxlength="10" placeholder="Masukkan NISN">
+
+        <button class="primary full" type="submit">Lanjut ke Formulir</button>
+      </form>
+    </div>
+
+    <form id="biodataForm" class="panel hidden">
+      <h2>Formulir Biodata Siswa</h2>
+      <p class="muted">Isi dengan benar. Kolom bertanda * wajib diisi.</p>
+
+      <div class="section">A. Identitas Siswa</div>
+      <label>Nama lengkap *</label>
+      <input name="nama" id="nama" required readonly>
+      <label>Kelas *</label>
+      <input name="kelas" id="kelas" required readonly>
+      <label>NISN *</label>
+      <input name="nisn" id="nisn" required readonly>
+      <label>Tempat lahir *</label>
+      <input name="tempatLahir" required>
+      <label>Tanggal lahir *</label>
+      <input name="tanggalLahir" type="date" required>
+      <label>Jenis kelamin *</label>
+      <select name="jenisKelamin" required>
+        <option value="">Pilih jenis kelamin</option>
+        <option>Laki-laki</option>
+        <option>Perempuan</option>
+      </select>
+      <label>Agama (opsional)</label>
+      <input name="agama">
+      <label>Nomor HP siswa *</label>
+      <input name="hpSiswa" type="tel" required placeholder="08xxxxxxxxxx">
+      <label>Email (opsional)</label>
+      <input name="email" type="email" placeholder="nama@email.com">
+
+      <div class="section">B. Alamat Siswa</div>
+      <label>Alamat lengkap *</label>
+      <textarea name="alamat" rows="3" required></textarea>
+      <label>Desa/Kelurahan *</label>
+      <input name="desa" required>
+      <label>Kecamatan *</label>
+      <input name="kecamatan" required>
+      <label>Kabupaten/Kota *</label>
+      <input name="kabupaten" required>
+      <label>Provinsi *</label>
+      <input name="provinsi" value="Nusa Tenggara Timur" required>
+
+      <div class="section">C. Data Orang Tua/Wali</div>
+      <label>Nama ayah</label>
+      <input name="namaAyah">
+      <label>Pekerjaan ayah</label>
+      <input name="pekerjaanAyah">
+      <label>Nama ibu</label>
+      <input name="namaIbu">
+      <label>Pekerjaan ibu</label>
+      <input name="pekerjaanIbu">
+      <label>Nama wali (jika ada)</label>
+      <input name="namaWali">
+      <label>Hubungan dengan wali</label>
+      <input name="hubunganWali" placeholder="Misalnya paman atau bibi">
+      <label>Nomor HP orang tua/wali *</label>
+      <input name="hpOrtu" type="tel" required>
+      <label>Alamat orang tua/wali</label>
+      <textarea name="alamatOrtu" rows="3"></textarea>
+
+      <div class="section">D. Kegemaran dan Minat</div>
+      <label>Hobi atau kegemaran *</label>
+      <textarea name="hobi" rows="2" required></textarea>
+      <label>Bakat atau bidang yang diminati</label>
+      <textarea name="minat" rows="2"></textarea>
+      <label>Cita-cita *</label>
+      <input name="citaCita" required>
+
+      <div class="section">E. Rencana Setelah Tamat SMA</div>
+      <label>Rencana utama *</label>
+      <select name="rencana" required>
+        <option value="">Pilih rencana</option>
+        <option value="Kuliah">Melanjutkan kuliah</option>
+        <option value="Bekerja">Bekerja</option>
+        <option value="Wirausaha">Berwirausaha</option>
+        <option value="Pelatihan">Mengikuti pelatihan</option>
+        <option value="Lainnya">Rencana lainnya</option>
+      </select>
+      <label>Jurusan kuliah atau pekerjaan yang diinginkan</label>
+      <input name="tujuanLanjut">
+      <label>Alasan memilih rencana tersebut</label>
+      <textarea name="alasan" rows="3"></textarea>
+      <label>Harapan atau hal yang ingin disampaikan kepada guru wali</label>
+      <textarea name="harapan" rows="3"></textarea>
+
+      <div class="notice">
+        Dengan menyimpan formulir, siswa menyatakan bahwa data yang diisi benar.
+        Pada versi uji coba, data hanya tersimpan di browser ini.
+      </div>
+      <button class="primary full" type="submit">Simpan Formulir</button>
+      <button class="secondary full" type="button" onclick="logoutSiswa()">Kembali</button>
+      <p id="formMessage" role="status"></p>
+    </form>
+
+    <div class="panel hidden" id="donePanel">
+      <h2>Formulir Tersimpan</h2>
+      <p class="success">Data berhasil disimpan dalam mode uji coba pada browser ini.</p>
+      <p id="doneInfo"></p>
+      <p class="notice">Ini belum berarti data sudah terkirim kepada guru. Penyimpanan online belum diaktifkan.</p>
+      <button class="secondary full" onclick="logoutSiswa()">Kembali ke Halaman Siswa</button>
+    </div>
+  </section>
+
+  <section id="pageGuru" class="hidden">
+    <div class="panel" id="guruLoginPanel">
+      <h2>Login Guru Wali</h2>
+      <p class="muted">Dison Linome, S.Pd, Gr.</p>
+      <form id="guruLoginForm">
+        <label for="guruPassword">Kata sandi uji coba</label>
+        <input id="guruPassword" type="password" required autocomplete="current-password">
+        <button class="primary full" type="submit">Masuk</button>
+      </form>
+    </div>
+
+    <div id="guruPanel" class="hidden">
+      <div class="panel">
+        <h2>Dashboard Guru Wali</h2>
+        <p class="muted">Pendataan Murid Wali · TA 2026/2027</p>
+        <h3 id="jumlahData">0 siswa terdata</h3>
+        <label for="cariSiswa">Cari nama atau NISN</label>
+        <input id="cariSiswa" placeholder="Ketik nama atau NISN...">
+        <div class="actions">
+          <button class="primary" onclick="exportCSV()">Unduh Excel (CSV)</button>
+          <button class="secondary" onclick="renderData()">Muat Ulang</button>
+          <button class="danger" onclick="logoutGuru()">Keluar</button>
+        </div>
+        <p class="notice">Daftar berikut hanya berasal dari penyimpanan browser ini. Belum mencakup data dari HP siswa lain.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Nama</th><th>Kelas</th><th>NISN</th><th>Nomor HP</th><th>Rencana</th><th>Aksi</th></tr></thead>
+            <tbody id="dataRows"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="panel hidden" id="detailPanel">
+        <h2>Detail Biodata</h2>
+        <div id="detailContent"></div>
+        <button class="secondary full" onclick="document.getElementById('detailPanel').classList.add('hidden')">Tutup Detail</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <strong>Guru Wali: Dison Linome, S.Pd, Gr.</strong><br>
+  SMA Negeri 1 Soe · Tahun Ajaran 2026/2027
+</footer>
+
+<script>
+"use strict";
+
+/*
+ * MODE UJI COBA LOKAL.
+ * Data disimpan di browser ini, bukan Firebase.
+ * Jangan gunakan untuk data pribadi siswa sungguhan.
+ * Login dan kata sandi di dalam JavaScript bukan pengamanan server.
+ */
+
+const STORAGE_KEY = "SMAN1SOE_MURID_WALI_DEMO_2026";
+let identitasAktif = null;
+let guruAktif = false;
+
+function ambilData() {
+  try {
+    const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    return Array.isArray(data) ? data : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function simpanData(data) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function showPage(page) {
+  document.getElementById("pageSiswa").classList.toggle("hidden", page !== "siswa");
+  document.getElementById("pageGuru").classList.toggle("hidden", page !== "guru");
+  document.getElementById("tabSiswa").classList.toggle("active", page === "siswa");
+  document.getElementById("tabGuru").classList.toggle("active", page === "guru");
+}
+
+document.getElementById("loginForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const nama = document.getElementById("loginNama").value.trim();
+  const kelas = document.getElementById("loginKelas").value;
+  const nisn = document.getElementById("loginNisn").value.trim();
+
+  if (!nama || !kelas || !/^[0-9]{10}$/.test(nisn)) {
+    alert("Periksa nama, kelas, dan NISN 10 digit.");
+    return;
+  }
+
+  const data = ambilData();
+  const sudahAda = data.find(x => x.nisn === nisn);
+
+  if (sudahAda) {
+    if (!confirm("NISN ini sudah memiliki data di browser ini. Apakah Anda ingin membuka formulir untuk memperbarui data?")) return;
+    document.getElementById("biodataForm").reset();
+    isiIdentitas(nama, kelas, nisn);
+    for (const [key, value] of Object.entries(sudahAda)) {
+      const field = document.querySelector('#biodataForm [name="' + key + '"]');
+      if (field && typeof value === "string") field.value = value;
+    }
+  } else {
+    document.getElementById("biodataForm").reset();
+    isiIdentitas(nama, kelas, nisn);
+  }
+
+  identitasAktif = { nama, kelas, nisn };
+  document.getElementById("loginPanel").classList.add("hidden");
+  document.getElementById("biodataForm").classList.remove("hidden");
+  document.getElementById("donePanel").classList.add("hidden");
+  document.getElementById("formMessage").textContent = "";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+function isiIdentitas(nama, kelas, nisn) {
+  document.getElementById("nama").value = nama;
+  document.getElementById("kelas").value = kelas;
+  document.getElementById("nisn").value = nisn;
+}
+
+document.getElementById("biodataForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  if (!identitasAktif) return;
+
+  const formData = new FormData(this);
+  const record = {
+    dibuatPada: new Date().toISOString(),
+    guruWali: "Dison Linome, S.Pd, Gr."
+  };
+
+  for (const [key, value] of formData.entries()) {
+    record[key] = String(value).trim();
+  }
+
+  record.nama = identitasAktif.nama;
+  record.kelas = identitasAktif.kelas;
+  record.nisn = identitasAktif.nisn;
+
+  const data = ambilData();
+  const index = data.findIndex(x => x.nisn === record.nisn);
+
+  if (index >= 0) {
+    data[index] = { ...data[index], ...record, diperbaruiPada: new Date().toISOString() };
+  } else {
+    data.push(record);
+  }
+
+  try {
+    simpanData(data);
+    this.classList.add("hidden");
+    document.getElementById("donePanel").classList.remove("hidden");
+    document.getElementById("doneInfo").textContent =
+      record.nama + " · Kelas " + record.kelas + " · Guru wali: " + record.guruWali;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  } catch (err) {
+    alert("Data gagal disimpan. Penyimpanan browser mungkin penuh atau dinonaktifkan.");
+  }
+});
+
+function logoutSiswa() {
+  identitasAktif = null;
+  document.getElementById("loginForm").reset();
+  document.getElementById("biodataForm").reset();
+  document.getElementById("biodataForm").classList.add("hidden");
+  document.getElementById("donePanel").classList.add("hidden");
+  document.getElementById("loginPanel").classList.remove("hidden");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+document.getElementById("guruLoginForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const password = document.getElementById("guruPassword").value;
+
+  // Password ini hanya untuk demonstrasi lokal.
+  if (password !== "GuruDemo2026!") {
+    alert("Kata sandi tidak sesuai.");
+    return;
+  }
+
+  guruAktif = true;
+  document.getElementById("guruPassword").value = "";
+  document.getElementById("guruLoginPanel").classList.add("hidden");
+  document.getElementById("guruPanel").classList.remove("hidden");
+  renderData();
+});
+
+function logoutGuru() {
+  guruAktif = false;
+  document.getElementById("guruPanel").classList.add("hidden");
+  document.getElementById("guruLoginPanel").classList.remove("hidden");
+  document.getElementById("detailPanel").classList.add("hidden");
+}
+
+document.getElementById("cariSiswa").addEventListener("input", renderData);
+
+function aman(teks) {
+  return String(teks ?? "").replace(/[&<>"']/g, function(c) {
+    return {
+      "&": "&amp;", "<": "&lt;", ">": "&gt;",
+      '"': "&quot;", "'": "&#39;"
+    }[c];
+  });
+}
+
+function renderData() {
+  if (!guruAktif) return;
+
+  const cari = document.getElementById("cariSiswa").value.trim().toLowerCase();
+  const data = ambilData().filter(x =>
+    String(x.nama || "").toLowerCase().includes(cari) ||
+    String(x.nisn || "").includes(cari)
+  );
+
+  document.getElementById("jumlahData").textContent =
+    ambilData().length + " siswa terdata pada browser ini";
+
+  const tbody = document.getElementById("dataRows");
+  tbody.innerHTML = "";
+
+  if (data.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6">Belum ada data yang cocok.</td></tr>';
+    return;
+  }
+
+  data.forEach((s, i) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML =
+      "<td>" + aman(s.nama) + "</td>" +
+      "<td>" + aman(s.kelas) + "</td>" +
+      "<td>" + aman(s.nisn) + "</td>" +
+      "<td>" + aman(s.hpSiswa) + "</td>" +
+      "<td>" + aman(s.rencana) + "</td>" +
+      '<td><button class="secondary" type="button" data-detail="' +
+      aman(s.nisn) + '">Detail</button></td>';
+    tbody.appendChild(tr);
+  });
+
+  tbody.querySelectorAll("[data-detail]").forEach(btn => {
+    btn.addEventListener("click", () => lihatDetail(btn.dataset.detail));
+  });
+}
+
+function lihatDetail(nisn) {
+  if (!guruAktif) return;
+  const s = ambilData().find(x => x.nisn === nisn);
+  if (!s) return;
+
+  const area = document.getElementById("detailContent");
+  area.innerHTML = Object.entries(s).map(([key, value]) =>
+    "<p><strong>" + aman(key) + ":</strong> " + aman(value) + "</p>"
+  ).join("");
+
+  document.getElementById("detailPanel").classList.remove("hidden");
+  document.getElementById("detailPanel").scrollIntoView({ behavior: "smooth" });
+}
+
+function exportCSV() {
+  if (!guruAktif) {
+    alert("Silakan masuk sebagai guru terlebih dahulu.");
+    return;
+  }
+
+  const data = ambilData();
+  if (!data.length) {
+    alert("Belum ada data untuk diunduh.");
+    return;
+  }
+
+  const kolom = [...new Set(data.flatMap(s => Object.keys(s)))];
+  const kutip = v => '"' + String(v ?? "").replace(/"/g, '""') + '"';
+  const baris = [
+    kolom.map(kutip).join(";"),
+    ...data.map(s => kolom.map(k => kutip(s[k])).join(";"))
+  ];
+
+  const blob = new Blob(["\uFEFF" + baris.join("\r\n")], {
+    type: "text/csv;charset=utf-8;"
+  });
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "Rekap_Murid_Wali_SMAN1_Soe.csv";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
+showPage("siswa");
+</script>
+</body>
+</html>
